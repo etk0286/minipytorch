@@ -36,13 +36,12 @@ dag_project/
 This project uses Conda for environment management to ensure clean dependency tracking:
 ```bash
 # Create a virtual environment
-conda create -n dag-engine python=3.10 -y
+conda env create -f environment.yml
 
 # Activate the environment
-conda activate dag-engine
+conda activate minipytorch
 
-# Install visualization and scientific computing dependencies
-conda install numpy networkx matplotlib -y
+#
 ```
 
 ### 2. Run the Training Engine
