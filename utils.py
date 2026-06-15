@@ -1,6 +1,6 @@
-# utils.py
 import networkx as nx
 import matplotlib.pyplot as plt
+import numpy as np  # [新增] 為了判斷矩陣維度
 
 def visualize_graph(engine_graph, title="Computational Graph"):
     # 1. 建立 NetworkX 的有向圖物件
@@ -8,10 +8,20 @@ def visualize_graph(engine_graph, title="Computational Graph"):
 
     # 2. 將我們的節點與連線載入
     for node in engine_graph.nodes:
-        # 設定節點顯示文字：包含名稱與計算結果
-        # 如果還沒計算 (None)，就顯示 ?
-        val_str = "?" if node.value is None else str(node.value)
-        label = f"{node.name}\n(val: {val_str})"
+
+        if node.value is None:
+            val_str = "?"
+        elif isinstance(node.value, np.ndarray):
+            # 如果是 Numpy 陣列 (例如 784 個像素)，只印出維度形狀
+            val_str = f"shape: {node.value.shape}"
+        else:
+            # 如果是單一純量 (例如 Loss 值)，印出小數點後四位
+            try:
+                val_str = f"{float(node.value):.4f}"
+            except:
+                val_str = str(node.value)
+                
+        label = f"{node.name}\n({val_str})"
         
         G.add_node(node.name, label=label)
 
