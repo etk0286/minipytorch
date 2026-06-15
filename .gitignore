@@ -1,2 +1,4 @@
 /.vscode
 /__pycache__
+fashion-mnist_train.csv
+*.csv
