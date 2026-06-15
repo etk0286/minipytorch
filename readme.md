@@ -1,46 +1,64 @@
-# MiniPyTorch: DAG-Based Autograd and Neural Network Engine
+# MiniPyTorch v2.0: DAG-Based Autograd and Neural Network Engine
 
 ## 📖 Project Overview
-This project is the final deliverable for the "Data Structures" course. Unlike traditional foundational CRUD applications (e.g., management systems), this project dives straight into the core of modern AI frameworks (such as PyTorch and TensorFlow). 
+This project is an advanced implementation for a "Data Structures and Algorithms" course. Unlike traditional CRUD applications, this project dives straight into the core mechanics of modern AI frameworks (such as PyTorch and TensorFlow). 
 
-Built entirely from scratch without relying on any external deep learning libraries, it is a lightweight tensor computation engine supporting **Automatic Differentiation (Autograd)**. The system simulates the complete lifecycle of a neural network, including graph-based dynamic scheduling, forward pass evaluation, and backward pass computation based on the chain rule of calculus. Using a single-layer perceptron as an example, the project successfully demonstrates how a model automatically converges and learns hidden physical patterns through Gradient Descent.
+Built entirely from scratch **without relying on any external deep learning libraries**, it is a lightweight tensor computation engine supporting **Automatic Differentiation (Autograd)**. 
+
+In **v2.0**, the system evolves from a static forward-pass calculator into a complete AI engine capable of "learning." By implementing the calculus chain rule and Gradient Descent, we successfully simulate the full lifecycle of a neural network, allowing the model to automatically converge and discover hidden physical rules from raw data.
+
+## ✨ v2.0 New Features & Highlights
+1. **Backpropagation Engine**: Implemented a "time-reversal" traversal in the Directed Acyclic Graph (DAG) to automatically compute gradients for all nodes based on the forward execution sequence.
+2. **Calculus Chain Rule Implementation**: Expanded the `Node` classes with dedicated partial derivative logic for `Add`, `Multiply`, `ReLU` activation, and `MSELoss` (Mean Squared Error).
+3. **Gradient Descent & Training Loop**: Introduced a complete Epoch-based training mechanism where the model dynamically updates its weights ($w$) and biases ($b$) using computed gradients.
+4. **Lossless Graph Reusability**: Solved Kahn's Algorithm's node-consumption bottleneck by introducing an "Indegree Shadow Copy" mechanism. The computational graph can now be executed infinitely without destroying its original topological structure.
+5. **Training Process Visualization**: In addition to the topological DAG plots, v2.0 introduces Matplotlib-based Loss Convergence Curves to intuitively track the model's learning trajectory.
 
 ## 🎯 Core Data Structures & Algorithm Design
-The essence of this project lies in transforming abstract mathematical and computational processes into concrete data structure implementations:
+The essence of this project lies in transforming abstract mathematical processes into concrete data structure implementations:
 
 | Data Structure / Algorithm | Application in Project | Engineering Bottleneck Solved |
 | :--- | :--- | :--- |
-| **Directed Acyclic Graph (DAG)** | Tracks dependencies between variables and computational nodes (Add, Multiply, ReLU, etc.). | Replaces rigid sequential code, transforming static math formulas into a dynamically trackable and parallel-friendly topological structure. |
-| **Queue (Deque)** | Implements Kahn's Algorithm for Topological Sorting. | Reduces the time complexity of node scheduling to $\mathcal{O}(V+E)$, ensuring downstream nodes are only triggered when all prerequisites are met. |
-| **Hash Table (Dictionary)** | Creates a "shadow copy" of node Indegrees. | Ensures that the original topological structure is not destroyed or consumed during the thousands of iterations required in a machine learning training loop. |
-| **Dynamic Array (List)** | Stores the execution sequence for "time-reversal" (Backward Pass) and historical Loss metrics. | Perfectly fulfills the LIFO (Last-In-First-Out) traversal requirements essential for Backpropagation. |
+| **Directed Acyclic Graph (DAG)** | Tracks dependencies between variables and computational nodes (Add, Multiply, ReLU, etc.). | Replaces rigid sequential code, transforming static math formulas into dynamically trackable, parallel-friendly topological structures. |
+| **Queue (Deque)** | Implements Kahn's Algorithm for Topological Sorting (Forward Pass). | Reduces node scheduling time complexity to $\mathcal{O}(V+E)$, ensuring downstream nodes are triggered only when all prerequisites are met. |
+| **Hash Table (Dictionary)** | Creates a "shadow copy" of node Indegrees. | Ensures that the original graph topology is not consumed or destroyed during the thousands of iterations in a machine learning training loop. |
+| **Dynamic Array (List)** | Records the execution sequence and historical Loss metrics. | Perfectly fulfills the LIFO (Last-In-First-Out) traversal requirements essential for Backpropagation. |
 
 ## 📂 System Architecture & File Structure
 The project adopts an Object-Oriented Programming (OOP) design, strictly adhering to the separation of concerns:
 
 ```text
-dag_project/
+minipytorch/
 │
 ├── core/                  # Core Computation Engine
-│   ├── node.py            # Defines the base Node class, specific math operations (Add, Multiply, ReLU, MSELoss), and partial derivative rules.
-│   └── graph.py           # DAG Manager responsible for edge connections, topological scheduling (execute), and backpropagation (backward).
+│   ├── node.py            # Defines the base Node class, math operations (Add, Mul), neural network layers (ReLU, MSELoss), and their derivative rules.
+│   └── graph.py           # DAG Manager: handles edge connections, topological scheduling (execute), and backpropagation (backward).
 │
 ├── utils.py               # Visualization tools utilizing NetworkX and Matplotlib to render DAG topologies.
-├── main.py                # System entry point: defines model architecture, loads training data, and executes the gradient descent loop.
-└── README.md              # Project documentation
+├── main.py                # System entry point: defines model architecture, loads data, executes the training loop, and plots results.
+├── environment.yml        # Conda environment configuration.
+└── README.md              # Project documentation.
 ```
-
 ## 🚀 Quick Start
 
 ### 1. Environment Setup
 This project uses Conda for environment management to ensure clean dependency tracking:
-```bash
+
 # Create a virtual environment
+```bash
 conda env create -f environment.yml
+```
 
 # Activate the environment
+```bash
 conda activate minipytorch
+```
 
+# Download the Dataset (Windows)
+```bash
+curl -L -o fashion-mnist_train.csv.zip [https://github.com/skilfoy/datasets/raw/main/fashion-mnist_train.csv.zip](https://github.com/skilfoy/datasets/raw/main/fashion-mnist_train.csv.zip)
+tar -xf fashion-mnist_train.csv.zip
+```
 #
 ```
 
